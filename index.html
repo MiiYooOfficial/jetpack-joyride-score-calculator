@@ -531,9 +531,10 @@ function calculateScore() {
         Math.max(
             0,
             Math.round(
-                (100 - collisions * 5)
-                * playbackSpeed
-                / attempt
+                1000 *
+                Math.pow(playbackSpeed / 2, 0.5) *
+                Math.pow(0.95, collisions) *
+                Math.pow(0.97, attempt - 1)
             )
         );
 
