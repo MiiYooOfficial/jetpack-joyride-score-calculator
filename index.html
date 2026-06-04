@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Jetpack Joyride Score Calculator</title>
+
+<style>
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overflow: hidden;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+/* ---------------- BACKGROUND ---------------- */
+
+.bg-wrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 200%;
+    height: 100%;
+    display: flex;
+    z-index: -1;
+    animation: scrollBackground 18s linear infinite;
+}
+
+.bg {
+    width: 50%;
+    background: url("background.png") repeat-x;
+    background-size: cover;
+}
+
+@keyframes scrollBackground {
+    from {
+        transform: translateX(0);
+    }
+    to {
+        transform: translateX(-50%);
+    }
+}
+
+/* ---------------- CONTAINER ---------------- */
+
+.container {
+    width: 500px;
+    background: rgba(255,255,255,0.95);
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+    position: relative;
+    z-index: 10;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.game-image {
+    display: block;
+    margin: 0 auto 25px auto;
+    width: 220px;
+}
+
+label {
+    display: block;
+    margin-top: 15px;
+    font-weight: bold;
+}
+
+input, button {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
+button {
+    margin-top: 25px;
+    cursor: pointer;
+    background-color: #f4d03f;
+    border: none;
+    font-weight: bold;
+}
+
+button:hover {
+    background-color: #f1c40f;
+}
+
+.error {
+    color: red;
+    margin-top: 10px;
+}
+
+.score {
+    margin-top: 15px;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+/* ---------------- PLAYBACK SPEED ---------------- */
+
+.speed-display {
+    text-align: center;
+    font-size: 28px;
+    font-weight: bold;
+    margin-top: 10px;
+    margin-bottom: 15px;
+}
+
+.slider-container {
+    padding: 0 5px;
+}
+
+.speed-slider {
+    width: 100%;
+}
+
+.speed-labels {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+    font-size: 14px;
+    color: #555;
+}
+
+.speed-labels span {
+    width: 16%;
+    text-align: center;
+}
+</style>
+</head>
+
+<body>
+
+<div class="bg-wrapper">
+    <div class="bg"></div>
+    <div class="bg"></div>
+</div>
+
+<div class="container">
+
+    <h1>Jetpack Joyride Score Calculator</h1>
+
+    <img src="jetpack-logo.png"
+         alt="Jetpack Joyride"
+         class="game-image">
+
+    <label for="collisions">
+        Number of Collisions
+    </label>
+
+    <input type="number"
+           id="collisions"
+           min="0">
+
+    <label>
+        Playback Speed (Enter 1 for default)
+    </label>
+
+    <div class="speed-display" id="speedDisplay">
+        1.00x
+    </div>
+
+    <div class="slider-container">
+
+        <input
+            type="range"
+            min="0.25"
+            max="2"
+            step="0.05"
+            value="1"
+            class="speed-slider"
+            id="speedSlider">
+
+        <div class="speed-labels">
+            <span>0.25</span>
+            <span>0.50</span>
+            <span>1.00</span>
+            <span>1.50</span>
+            <span>1.75</span>
+            <span>2.00</span>
+        </div>
+
+    </div>
+
+    <label for="attempt">
+        Attempt Number
+    </label>
+
+    <input
+        type="number"
+        id="attempt"
+        min="1">
+
+    <button onclick="calculateScore()">
+        Calculate Score
+    </button>
+
+    <div class="error" id="error"></div>
+    <div class="score" id="scoreDisplay"></div>
+
+</div>
+
+<script>
+
+const speedSlider =
+    document.getElementById("speedSlider");
+
+const speedDisplay =
+    document.getElementById("speedDisplay");
+
+speedSlider.addEventListener("input", () => {
+    speedDisplay.textContent =
+        Number(speedSlider.value).toFixed(2) + "x";
+});
+
+function calculateScore() {
+
+    const collisionsInput =
+        document.getElementById("collisions")
+            .value.trim();
+
+    const attemptInput =
+        document.getElementById("attempt")
+            .value.trim();
+
+    const playbackSpeed =
+        parseFloat(speedSlider.value);
+
+    const errorDiv =
+        document.getElementById("error");
+
+    const scoreDiv =
+        document.getElementById("scoreDisplay");
+
+    errorDiv.textContent = "";
+    scoreDiv.innerHTML = "";
+
+    const integerPattern = /^[0-9]+$/;
+
+    if (!integerPattern.test(collisionsInput)) {
+        errorDiv.textContent =
+            "Number of collisions must contain digits only.";
+        return;
+    }
+
+    if (!integerPattern.test(attemptInput)) {
+        errorDiv.textContent =
+            "Attempt number must contain digits only.";
+        return;
+    }
+
+    const collisions =
+        parseInt(collisionsInput, 10);
+
+    const attempt =
+        parseInt(attemptInput, 10);
+
+    if (collisions < 0) {
+        errorDiv.textContent =
+            "Number of collisions must be 0 or greater.";
+        return;
+    }
+
+    if (attempt <= 0) {
+        errorDiv.textContent =
+            "Attempt number should be positive.";
+        return;
+    }
+
+    /* TEMPORARY FORMULA */
+
+    let score =
+        Math.max(
+            0,
+            Math.round(
+                (100 - collisions * 5)
+                * playbackSpeed
+                / attempt
+            )
+        );
+
+    scoreDiv.innerHTML = `
+        <div style="font-size:22px; margin-top:10px;">
+            Your Final Score:
+            <strong>${score}</strong>
+        </div>
+
+        <div style="margin-top:10px;">
+            Go back to the video and
+            comment your score!
+        </div>
+    `;
+}
+
+</script>
+
+</body>
+</html>
