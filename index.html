@@ -6,9 +6,6 @@
 <title>Jetpack Joyride Score Calculator</title>
 
 <style>
-/* =====================================================
-   GENERAL
-===================================================== */
 
 html, body {
     margin: 0;
@@ -24,10 +21,6 @@ body {
     align-items: center;
     position: relative;
 }
-
-/* =====================================================
-   SCROLLING BACKGROUND
-===================================================== */
 
 .bg-wrapper {
     position: fixed;
@@ -56,8 +49,6 @@ body {
     }
 }
 
-/* Dark overlay for readability */
-
 body::after {
     content: "";
     position: fixed;
@@ -65,10 +56,6 @@ body::after {
     background: rgba(0,0,0,0.25);
     z-index: -1;
 }
-
-/* =====================================================
-   CONTAINER
-===================================================== */
 
 .container {
     width: 520px;
@@ -91,8 +78,6 @@ body::after {
         0 0 30px rgba(0,0,0,0.6),
         inset 0 0 20px rgba(255,255,255,0.05);
 }
-
-/* Hazard stripe header */
 
 .container::before {
     content: "";
@@ -132,10 +117,6 @@ body::after {
         inset 0 0 0 2px rgba(255,255,255,0.05);
 }
 
-/* =====================================================
-   HEADERS
-===================================================== */
-
 h1 {
     text-align: center;
 
@@ -168,19 +149,11 @@ h1 {
     opacity: 0.85;
 }
 
-/* =====================================================
-   LOGO
-===================================================== */
-
 .game-image {
     display: block;
     margin: 0 auto 25px auto;
     width: 240px;
 }
-
-/* =====================================================
-   FORM
-===================================================== */
 
 label {
     display: block;
@@ -213,10 +186,6 @@ input[type="number"] {
 
     color: white;
 }
-
-/* =====================================================
-   PLAYBACK SPEED
-===================================================== */
 
 .speed-display {
     text-align: center;
@@ -282,10 +251,6 @@ input[type="number"] {
     font-size: 13px;
 }
 
-/* =====================================================
-   BUTTON
-===================================================== */
-
 button {
     margin-top: 25px;
 
@@ -324,10 +289,6 @@ button:hover {
 button:active {
     transform: translateY(2px);
 }
-
-/* =====================================================
-   OUTPUT
-===================================================== */
 
 .error {
     color: #ff6666;
@@ -439,10 +400,6 @@ button:active {
 
 <script>
 
-/* ==========================================
-   PLAYBACK SPEED DISPLAY
-========================================== */
-
 const speedSlider =
     document.getElementById("speedSlider");
 
@@ -455,10 +412,6 @@ speedSlider.addEventListener("input", () => {
         Number(speedSlider.value).toFixed(2) + "x";
 
 });
-
-/* ==========================================
-   SCORE CALCULATOR
-========================================== */
 
 function calculateScore() {
 
@@ -521,11 +474,6 @@ function calculateScore() {
 
         return;
     }
-
-    /* =====================================
-       TEMPORARY FORMULA
-       Replace later
-    ===================================== */
 
     const score =
         Math.max(
